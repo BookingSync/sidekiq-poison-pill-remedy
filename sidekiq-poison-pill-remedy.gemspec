@@ -1,24 +1,24 @@
 # frozen_string_literal: true
 
-require_relative "lib/sidekiq/poison/pill/remedy/version"
+require_relative "lib/remedy/version"
 
 Gem::Specification.new do |spec|
   spec.name = "sidekiq-poison-pill-remedy"
-  spec.version = Sidekiq::Poison::Pill::Remedy::VERSION
+  spec.version = SidekiqPoisonPillRemedy::VERSION
   spec.authors = ["Karol Galanciak"]
   spec.email = ["karol.galanciak@gmail.com"]
 
-  spec.summary = "TODO: Write a short summary, because RubyGems requires one."
-  spec.description = "TODO: Write a longer description or delete this line."
-  spec.homepage = "TODO: Put your gem's website or public repo URL here."
+  spec.summary = "Enhances Sidekiq's job processing by automatically handling and rescheduling failed jobs (poison pills)"
+  spec.description = "Enhances Sidekiq's job processing by automatically handling and rescheduling failed jobs (poison pills)"
+  spec.homepage = "https://example.com"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.0.0"
 
-  spec.metadata["allowed_push_host"] = "TODO: Set to your gem server 'https://example.com'"
+  # spec.metadata["allowed_push_host"] = "TODO: Set to your gem server 'https://example.com'"
 
   spec.metadata["homepage_uri"] = spec.homepage
-  spec.metadata["source_code_uri"] = "TODO: Put your gem's public repo URL here."
-  spec.metadata["changelog_uri"] = "TODO: Put your gem's CHANGELOG.md URL here."
+  spec.metadata["source_code_uri"] = "https://example.com"
+  spec.metadata["changelog_uri"] = "https://example.com"
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
