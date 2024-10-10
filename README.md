@@ -4,19 +4,23 @@ The Sidekiq Poison Pill Remedy gem enhances Sidekiq's job processing by automati
 
 ## Installation
 
-TODO: Replace `UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG` with your gem name right after releasing it to RubyGems.org. Please do not do it earlier due to security reasons. Alternatively, replace this section with instructions to install your gem from git if you don't plan to release to RubyGems.org.
+Add this line to your application's Gemfile:
 
-Install the gem and add to the application's Gemfile by executing:
+`gem 'sidekiq-poison-pill-remedy'`
 
-    $ bundle add UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+And then execute:
 
-If bundler is not being used to manage dependencies, install the gem by executing:
+`$ bundle install`
 
-    $ gem install UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+Or install it yourself as:
+
+`$ gem install sidekiq-poison-pill-remedy`
 
 ## Usage
 
-TODO: Write usage instructions here
+The gem is supposed to be used in the following way when added to the application
+
+`config.super_fetch!(&SidekiqPoisonPillRemedy.remedy)`
 
 ## Development
 
@@ -26,7 +30,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/sidekiq-poison-pill-remedy.
+Bug reports and pull requests are welcome on GitHub at https://github.com/BookingSync/sidekiq-poison-pill-remedy.
 
 ## License
 
