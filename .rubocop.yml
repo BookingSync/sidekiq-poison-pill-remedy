@@ -5,4 +5,4 @@ AllCops:
 Metrics/AbcSize:
   Max: 19 
 Metrics/MethodLength:
-  Max: 20  # Increase the limit
+  Max: 20  
