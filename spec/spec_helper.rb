@@ -7,7 +7,10 @@ require 'sentry-ruby'
 require 'sidekiq'
 require 'sidekiq-poison-pill-remedy'
 
+Dir[File.join(__dir__, 'support', '**', '*.rb')].each { |f| require f }
+
 RSpec.configure do |config|
+  Sidekiq::Testing.inline!
   # Enable flags like --only-failures and --next-failure
   config.example_status_persistence_file_path = '.rspec_status'
 
@@ -21,6 +24,4 @@ RSpec.configure do |config|
   config.before(:all) do
     ENV['REDIS_URL'] ||= 'redis://localhost:6379/1'
   end
-
-  Dir[File.join(__dir__, 'support', '**', '*.rb')].each { |f| require f }
 end

@@ -1,7 +1,13 @@
 class MyJob
-  include Sidekiq::Worker
+  include Sidekiq::Job
+  sidekiq_options retry: 0
 
   def perform(arg)
-    raise 'An error occurred!' if arg == 'fail'
+    if arg == 'fail'
+      Sidekiq.logger.error('Forced failure for testing')
+
+    else
+      'surprise'
+    end
   end
 end
