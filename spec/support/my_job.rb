@@ -5,6 +5,10 @@ class MyJob
   sidekiq_options retry: 3
 
   def perform(arg)
-    raise StandardError, "Forced failure for testing" if arg == "fail"
+    if arg.nil?
+      raise StandardError, "Job was called with nil argument"
+    else
+      puts "Job executed successfully with argument: #{arg}"
+    end
   end
 end
