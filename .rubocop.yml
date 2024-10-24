@@ -1,0 +1,115 @@
+require:
+  - rubocop-performance
+  - rubocop-rspec
+
+inherit_mode:
+  merge:
+    - Exclude
+
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 3.1
+  Exclude:
+    - "db/**/*"
+    - "bin/**/*"
+    - "tmp/**/*"
+    - "log/**/*"
+    - "vendor/**/*"
+    - "spec/rails_helper.rb" 
+
+Layout/FrozenStringLiteralComment:
+  Enabled: true
+
+Layout/ArgumentAlignment:
+  EnforcedStyle: with_fixed_indentation
+
+Layout/ArrayAlignment:
+  EnforcedStyle: with_fixed_indentation
+
+Layout/EmptyLineBetweenDefs:
+  AllowAdjacentOneLineDefs: true
+
+Layout/EndAlignment:
+  EnforcedStyleAlignWith: variable
+
+Layout/FirstArgumentIndentation:
+  EnforcedStyle: consistent
+
+Layout/FirstArrayElementIndentation:
+  EnforcedStyle: consistent
+
+Layout/FirstHashElementIndentation:
+  EnforcedStyle: consistent
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Layout/MultilineOperationIndentation:
+  EnforcedStyle: indented
+
+Layout/ParameterAlignment:
+  EnforcedStyle: with_fixed_indentation
+
+Layout/SpaceBeforeBrackets:
+  Enabled: false
+
+
+Lint/UnusedMethodArgument:
+  AllowUnusedKeywordArguments: true
+
+Lint/AmbiguousBlockAssociation:
+  Exclude:
+    - 'spec/**/*'  
+
+
+Naming/FileName:
+  EnforcedStyle: snake_case
+  Exclude:
+    - 'lib/sidekiq-poison-pill-remedy.rb' 
+
+Naming/VariableNumber:
+  EnforcedStyle: snake_case
+
+
+RSpec/MultipleExpectations:
+  Max: 20
+
+RSpec/NestedGroups:
+  Max: 10
+
+RSpec/ExampleLength:
+  Max: 15
+  Exclude:
+    - 'spec/sidekiq_poison_pill_remedy_spec.rb'
+
+RSpec/VerifiedDoubles:
+  Exclude:
+    - 'spec/**/*.rb'  
+
+
+Metrics/AbcSize:
+  Max: 15
+  Exclude:
+    - 'lib/sidekiq_poison_pill_remedy.rb' 
+  
+
+Metrics/MethodLength:
+  Max: 20
+
+Metrics/BlockLength:
+  Exclude:
+    - 'lib/sidekiq_poison_pill_remedy.rb' 
+
+Layout/LineLength:
+  Max: 125
+
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+  ConsistentQuotesInMultiline: true
+
+Style/Documentation:
+  Enabled: false
+
+RSpec/AnyInstance:
+  Enabled: false

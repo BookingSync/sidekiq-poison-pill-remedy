@@ -6,5 +6,13 @@ source "https://rubygems.org"
 gemspec
 
 gem "rake", "~> 13.0"
+gem "sentry-ruby"
 
-gem "rspec", "~> 3.0"
+group :development, :test do
+  gem "rspec", "~> 3.0"
+  gem "rspec-sidekiq"
+  gem "rubocop", "~> 1.40", require: false
+  gem "rubocop-performance"
+  gem "rubocop-rake"
+  gem "rubocop-rspec"
+end
