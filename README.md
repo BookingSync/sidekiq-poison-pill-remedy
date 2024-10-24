@@ -20,7 +20,12 @@ Or install it yourself as:
 
 The gem is supposed to be used in the following way when added to the application
 
+Check Sidekiq super_fetch:[here](https://github.com/sidekiq/sidekiq/wiki/Reliability#using-super_fetch)
+
+Remedy is supposed to be use like:
 `config.super_fetch!(&SidekiqPoisonPillRemedy.remedy)`
+
+When a job fails, the SidekiqPoisonPillRemedy captures the failure and determines whether the job should be moved to a dedicated poison_pill queue.
 
 ## Development
 

@@ -7,7 +7,7 @@ module SidekiqPoisonPillRemedy
 
       job = Sidekiq::DeadSet.new.find_job(pill.jid)
 
-      if job.queue == 'poison_pill'
+      if job.queue == "poison_pill"
         capture_sentry_message(
           "#{job.klass} failed in the `#{job.queue}`, this means that it has to be urgently optimized on memory usage",
           level: :critical,
@@ -29,8 +29,8 @@ module SidekiqPoisonPillRemedy
     if defined?(Sentry)
       Sentry.capture_message(
         message,
-        level: level,
-        extra: { job_item: job_item }
+        level:,
+        extra: { job_item: }
       )
     end
 
