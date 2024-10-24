@@ -111,4 +111,5 @@ Style/StringLiterals:
 Style/Documentation:
   Enabled: false
 
-
+RSpec/AnyInstance:
+  Enabled: false

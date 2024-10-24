@@ -5,10 +5,8 @@ class MyJob
   sidekiq_options retry: 3
 
   def perform(arg)
-    if arg.nil?
-      raise StandardError, "Job was called with nil argument"
-    else
-      puts "Job executed successfully with argument: #{arg}"
-    end
+    raise StandardError, "Job was called with nil argument" if arg.nil?
+
+    puts "Job executed successfully with argument: #{arg}"
   end
 end

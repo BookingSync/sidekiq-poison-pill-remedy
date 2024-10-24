@@ -1,35 +1,49 @@
 # frozen_string_literal: true
 
-require "sidekiq"
-require "sidekiq/api"
-require "sidekiq/testing"
-require "rspec-sidekiq"
-require "sidekiq-poison-pill-remedy"
-require "support/my_job"
+require "spec_helper"
 
 RSpec.describe SidekiqPoisonPillRemedy do
-  before do
-    Sidekiq::Testing.fake!
-  end
+  describe ".remedy" do
+    subject(:call) { described_class.remedy.call(nil, job) }
 
-  it "moves job to poison_pill queue and logs message" do
-    puts "Starting test..."
+    let(:default_queue) { "default" }
+    let(:poison_pill_queue) { "poison_pill" }
+    let(:enqueue_job) { MyJob.set(queue: job_queue).perform_async("fail") }
+    let(:job) { Sidekiq::Queue.new(default_queue).find_job(enqueue_job) }
 
-    job_id = MyJob.perform_async(nil)
+    before do
+      Sidekiq::Testing.disable!
+      Sidekiq::Queue.new(poison_pill_queue).clear
+      Sidekiq::Queue.new(default_queue).clear
 
+      enqueue_job
 
-    expect(Sidekiq::Queue.new.size).to eq(1)
-    expect(Sidekiq::Queue.new("poison_pill").size).to eq(0)
-    puts "2"
+      # there is no easy way to move the job to DeadSet, the process is rather complex
+      # we would ideally execute a single method call have a proper setup but in that case
+      # we need to use stub
+      allow_any_instance_of(Sidekiq::DeadSet).to receive(:find_job).with(enqueue_job).and_return(job)
+    end
 
-    job = Sidekiq::Queue.new.find_job(job_id)
+    context "when the job is a poison pill in non-poison pill queue" do
+      let(:job_queue) { default_queue }
 
-    SidekiqPoisonPillRemedy.remedy.call(nil, job)
+      it "moves job to poison_pill queue and sends error notification" do
+        expect do
+          call
+        end.to change { Sidekiq::Queue.new(default_queue).count }.from(1).to(0)
+          .and change { Sidekiq::Queue.new(poison_pill_queue).count }.from(0).to(1)
+      end
+    end
 
-    puts "Jobs in Queue: #{Sidekiq::Queue.new.size}"
-    puts "3"
+    context "when the job is a poison pill in poison pill queue" do
+      let(:job_queue) { poison_pill_queue }
 
-    expect(Sidekiq::Queue.new.size).to eq(0)
-    expect(Sidekiq::Queue.new("poison_pill").size).to eq(1)
+      it "keep the jobs in posion pill queue and sends error notification" do
+        expect do
+          call
+        end.to avoid_changing { Sidekiq::Queue.new(default_queue).count }.from(0)
+          .and avoid_changing { Sidekiq::Queue.new(poison_pill_queue).count }.from(1)
+      end
+    end
   end
 end
