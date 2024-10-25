@@ -18,10 +18,8 @@ RSpec.describe SidekiqPoisonPillRemedy do
 
       enqueue_job
 
-      # there is no easy way to move the job to DeadSet, the process is rather complex
-      # we would ideally execute a single method call have a proper setup but in that case
-      # we need to use stub
       allow_any_instance_of(Sidekiq::DeadSet).to receive(:find_job).with(enqueue_job).and_return(job)
+      allow(Sentry).to receive(:capture_message)
     end
 
     context "when the job is a poison pill in non-poison pill queue" do
@@ -32,6 +30,12 @@ RSpec.describe SidekiqPoisonPillRemedy do
           call
         end.to change { Sidekiq::Queue.new(default_queue).count }.from(1).to(0)
           .and change { Sidekiq::Queue.new(poison_pill_queue).count }.from(0).to(1)
+
+        expect(Sentry).to have_received(:capture_message).with(
+          "MyJob was marked as `poison pill`, please create the job memory optimizations ticket timely",
+          level: :warning,
+          extra: hash_including(:job_item)
+        )
       end
     end
 
@@ -43,6 +47,12 @@ RSpec.describe SidekiqPoisonPillRemedy do
           call
         end.to avoid_changing { Sidekiq::Queue.new(default_queue).count }.from(0)
           .and avoid_changing { Sidekiq::Queue.new(poison_pill_queue).count }.from(1)
+
+        expect(Sentry).to have_received(:capture_message).with(
+          "MyJob failed in the `poison_pill`, this means that it has to be urgently optimized on memory usage",
+          level: :critical,
+          extra: hash_including(:job_item)
+        )
       end
     end
   end
