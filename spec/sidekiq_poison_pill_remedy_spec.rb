@@ -9,7 +9,7 @@ RSpec.describe SidekiqPoisonPillRemedy do
     let(:default_queue) { "default" }
     let(:poison_pill_queue) { "poison_pill" }
     let(:enqueue_job) { MyJob.set(queue: job_queue).perform_async("fail") }
-    let(:job) { Sidekiq::Queue.new(default_queue).find_job(enqueue_job) }
+    let(:job) { Sidekiq::Queue.new(job_queue).find_job(enqueue_job) }
 
     before do
       Sidekiq::Testing.disable!
@@ -19,7 +19,7 @@ RSpec.describe SidekiqPoisonPillRemedy do
       enqueue_job
 
       allow_any_instance_of(Sidekiq::DeadSet).to receive(:find_job).with(enqueue_job).and_return(job)
-      allow(Sentry).to receive(:capture_message)
+      allow(Sentry).to receive(:capture_message).and_call_original
     end
 
     context "when the job is a poison pill in non-poison pill queue" do
@@ -43,6 +43,8 @@ RSpec.describe SidekiqPoisonPillRemedy do
       let(:job_queue) { poison_pill_queue }
 
       it "keep the jobs in posion pill queue and sends error notification" do
+        expect(job.queue).to eq("poison_pill")
+
         expect do
           call
         end.to avoid_changing { Sidekiq::Queue.new(default_queue).count }.from(0)
