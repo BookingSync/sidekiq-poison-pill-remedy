@@ -20,7 +20,7 @@ RSpec.describe SidekiqPoisonPillRemedy do
 
       allow_any_instance_of(Sidekiq::DeadSet).to receive(:find_job).with(enqueue_job).and_return(job)
       allow(Sentry).to receive(:capture_message).and_call_original
-      allow(Sidekiq.logger).to receive(:fatal)
+      allow(Sidekiq.logger).to receive(:fatal).and_call_original
     end
 
     context "when the job is a poison pill in non-poison pill queue" do
