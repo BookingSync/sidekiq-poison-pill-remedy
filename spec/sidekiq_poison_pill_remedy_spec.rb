@@ -20,6 +20,7 @@ RSpec.describe SidekiqPoisonPillRemedy do
 
       allow_any_instance_of(Sidekiq::DeadSet).to receive(:find_job).with(enqueue_job).and_return(job)
       allow(Sentry).to receive(:capture_message).and_call_original
+      allow(Sidekiq.logger).to receive(:fatal)
     end
 
     context "when the job is a poison pill in non-poison pill queue" do
@@ -35,6 +36,9 @@ RSpec.describe SidekiqPoisonPillRemedy do
           "MyJob was marked as `poison pill`, please create the job memory optimizations ticket timely",
           level: :warning,
           extra: hash_including(:job_item)
+        )
+        expect(Sidekiq.logger).to have_received(:fatal).with(
+          "MyJob was marked as `poison pill`, please create the job memory optimizations ticket timely"
         )
       end
     end
@@ -54,6 +58,9 @@ RSpec.describe SidekiqPoisonPillRemedy do
           "MyJob failed in the `poison_pill`, this means that it has to be urgently optimized on memory usage",
           level: :critical,
           extra: hash_including(:job_item)
+        )
+        expect(Sidekiq.logger).to have_received(:fatal).with(
+          "MyJob failed in the `poison_pill`, this means that it has to be urgently optimized on memory usage"
         )
       end
     end
