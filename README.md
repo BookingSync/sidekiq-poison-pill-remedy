@@ -25,7 +25,7 @@ Check Sidekiq super_fetch:[here](https://github.com/sidekiq/sidekiq/wiki/Reliabi
 Remedy is supposed to be use like:
 `config.super_fetch!(&SidekiqPoisonPillRemedy.remedy)`
 
-When a job fails, the SidekiqPoisonPillRemedy captures the failure and determines whether the job should be moved to a dedicated poison_pill queue.
+When a job is considered a poison pill by Sidekiq, SidekiqPoisonPillRemedy prevents it from being moved to DeadSet and moves it to a dedicated queue to make sure the job will be processed after capturing team's attention with Sentry notification
 
 ## Development
 
