@@ -1,24 +1,31 @@
-# Sidekiq::Poison::Pill::Remedy
+# SidekiqPoisonPillRemedy
 
-TODO: Delete this and the text below, and describe your gem
-
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/sidekiq/poison/pill/remedy`. To experiment with that code, run `bin/console` for an interactive prompt.
+The Sidekiq Poison Pill Remedy gem enhances Sidekiq's job processing by automatically handling and rescheduling failed jobs (poison pills) with integrated logging and error tracking through Sentry, ultimately improving reliability and performance optimization.
 
 ## Installation
 
-TODO: Replace `UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG` with your gem name right after releasing it to RubyGems.org. Please do not do it earlier due to security reasons. Alternatively, replace this section with instructions to install your gem from git if you don't plan to release to RubyGems.org.
+Add this line to your application's Gemfile:
 
-Install the gem and add to the application's Gemfile by executing:
+`gem 'sidekiq-poison-pill-remedy'`
 
-    $ bundle add UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+And then execute:
 
-If bundler is not being used to manage dependencies, install the gem by executing:
+`$ bundle install`
 
-    $ gem install UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+Or install it yourself as:
+
+`$ gem install sidekiq-poison-pill-remedy`
 
 ## Usage
 
-TODO: Write usage instructions here
+The gem is supposed to be used in the following way when added to the application
+
+Check Sidekiq super_fetch:[here](https://github.com/sidekiq/sidekiq/wiki/Reliability#using-super_fetch)
+
+Remedy is supposed to be use like:
+`config.super_fetch!(&SidekiqPoisonPillRemedy.remedy)`
+
+When a job is considered a poison pill by Sidekiq, SidekiqPoisonPillRemedy prevents it from being moved to DeadSet and moves it to a dedicated queue to make sure the job will be processed after capturing team's attention with Sentry notification
 
 ## Development
 
@@ -28,7 +35,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/sidekiq-poison-pill-remedy.
+Bug reports and pull requests are welcome on GitHub at https://github.com/BookingSync/sidekiq-poison-pill-remedy.
 
 ## License
 
